@@ -9,5 +9,5 @@ a.out
 # Windows metadata
 *:Zone.Identifier
 
-# Test/secret data
+# Secret/test data
 secret.txt
