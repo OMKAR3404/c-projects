@@ -1,0 +1,13 @@
+# Compiled files
+a.out
+*.o
+*.gch
+
+# Generated BMP files
+*.bmp
+
+# Windows metadata
+*:Zone.Identifier
+
+# Test/secret data
+secret.txt
