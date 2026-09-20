@@ -1,4 +1,4 @@
-cat > README.md << 'EOF'
+
 # C Projects
 
 A collection of my C programming projects developed while learning and strengthening my skills in C programming, data structures, system programming, and embedded systems.
@@ -53,7 +53,3 @@ c-projects/
     ├── types.h
     └── test_encode.c
 
-
-
-
-
