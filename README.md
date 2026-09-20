@@ -1,205 +1,59 @@
-C Projects
+cat > README.md << 'EOF'
+# C Projects
 
-A collection of C programming projects focused on low-level programming,
-file handling, bit manipulation, data structures, and embedded-systems
-fundamentals.
+A collection of my C programming projects developed while learning and strengthening my skills in C programming, data structures, system programming, and embedded systems.
 
-Projects
+## Projects
 
-BMP Steganography
+### 1. Stegnography
 
-A C-based image steganography project that hides secret file data inside
-a BMP image using Least Significant Bit (LSB) encoding.
+A C-based BMP image steganography project that hides secret file data inside an image using Least Significant Bit (LSB) encoding.
 
-The project demonstrates how image bytes can be modified at the bit
-level to store information while preserving the visual appearance of the
-image.
+**Topics covered:**
 
-Encoding Flow
+- File handling in C
+- BMP image processing
+- Bit manipulation
+- LSB encoding
+- Pointers
+- Structures
+- Memory handling
+- Command-line arguments
 
-                    BMP Image
-                        |
-                        v
-              +-------------------+
-              | Copy BMP Header   |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Encode Magic      |
-              | String             |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Encode Secret     |
-              | Extension Size    |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Encode Secret     |
-              | File Extension    |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Encode Secret     |
-              | File Size         |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Encode Secret     |
-              | File Data         |
-              +-------------------+
-                        |
-                        v
-              +-------------------+
-              | Copy Remaining    |
-              | Image Data        |
-              +-------------------+
-                        |
-                        v
-                   Stego BMP
+📁 [Open Stegnography Project](./Stegnography/)
 
-How LSB Encoding Works
+## Learning Focus
 
-Each character of the secret data is represented using 8 bits.
+This repository documents my hands-on C programming journey and projects.
 
-For every bit of the secret character, the least significant bit of one
-image byte is modified.
+The main areas I am working on include:
 
-For example:
+- C Programming
+- Data Structures and Algorithms
+- Pointers and Memory Management
+- Bit Manipulation
+- File Handling
+- Linux Programming
+- Embedded C
+- Microcontrollers
+- System Programming
 
-Image byte:       10110110
-Secret bit:              1
-                         |
-                         v
-Encoded byte:     10110111
+## Repository Structure
 
-Only the least significant bit is changed, which keeps the visual
-difference in the image extremely small.
-
-Features
-
-BMP image file handling
-
-LSB-based data encoding
-
-Magic string encoding
-
-Secret file extension encoding
-
-Secret file size encoding
-
-Secret file data encoding
-
-BMP header preservation
-
-Image capacity validation
-
-Binary file operations
-
-Modular C implementation
-
-Technologies & Concepts
-
-C Programming
-
-GCC
-
-Linux / WSL
-
-File I/O
-
-Pointers
-
-Structures
-
-Bit Manipulation
-
-String Handling
-
-Memory Management
-
-Git & GitHub
-
-Project Structure
-
+```text
 c-projects/
 │
 ├── README.md
 │
-└── Steganography/
+└── Stegnography/
+    ├── README.md
     ├── encode.c
     ├── encode.h
     ├── common.h
     ├── types.h
     └── test_encode.c
 
-Build
 
-Compile the project using GCC:
 
-gcc encode.c test_encode.c -o steganography
 
-Run:
-
-./steganography
-
-The exact compilation command may depend on the final project
-structure and the source files included in the project.
-
-Learning Objectives
-
-This project is part of my ongoing C programming and embedded-systems
-learning journey.
-
-Through this project, I am strengthening my understanding of:
-
-Binary file handling
-
-Bit-level operations
-
-Pointers and arrays
-
-Structures
-
-Function modularity
-
-File pointers and file positions
-
-Memory handling
-
-Debugging in C
-
-Linux development
-
-Git and GitHub workflow
-
-Future Improvements
-
-Implement the decoding functionality
-
-Improve command-line argument validation
-
-Improve error handling
-
-Add support for more image formats
-
-Improve memory management
-
-Support larger secret files
-
-Add automated tests
-
-Document the decoding algorithm
-
-Author
-
-Omkar More
-
-Electrical Engineering | Embedded Systems | C Programming
-
-GitHub: OMKAR3404
+
