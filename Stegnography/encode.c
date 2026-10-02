@@ -189,7 +189,7 @@ Status encode_secret_file_data(EncodeInfo *encInfo){
     return e_success;
 }
 
-Status copy_remaining_img_data(FILE *fptr_src, FILE *fptr_dest){
+/*Status copy_remaining_img_data(FILE *fptr_src, FILE *fptr_dest){
     char data[MAX_IMAGE_BUF_SIZE];
     size_t bytes_read;
 
@@ -197,6 +197,18 @@ Status copy_remaining_img_data(FILE *fptr_src, FILE *fptr_dest){
     {
         fwrite(data, 1, bytes_read, fptr_dest);
     }
+
+    return e_success;
+}*/
+
+
+Status copy_remaining_img_data(FILE *fptr_src, FILE *fptr_dest,EncodeInfo *encInfo){
+    
+    int size = 54 + encInfo->image_capacity - ftell(fptr_src);
+    char data[size];
+
+    fread(data,size,1,fptr_src);
+    fwrite(data,size,1,fptr_dest);
 
     return e_success;
 }
@@ -219,7 +231,7 @@ Status do_encoding(EncodeInfo *encInfo){
                         printf("INFO : Encoded secret file size\n");
                         if(encode_secret_file_data(encInfo) == e_success){
                             printf("INFO : Encoded secret file data\n");
-                            copy_remaining_img_data(encInfo->fptr_src_image,encInfo->fptr_stego_image);
+                            copy_remaining_img_data(encInfo->fptr_src_image,encInfo->fptr_stego_image,encInfo);
 
 
                         }else{

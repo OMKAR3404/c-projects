@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "encode.h"
+#include"decode.h"
 #include "types.h"
 #include <string.h>
 
@@ -37,7 +38,7 @@ int main(int argc , char* argv[])
 
                     }else{
 
-                        printf("INFO : Encoding failed \n");
+                        printf("Error : Encoding failed \n");
 
                         return 0;
                     }
@@ -49,8 +50,28 @@ int main(int argc , char* argv[])
                 printf("INFO : Read and validate encode args is failure\n");
                 return 0;
             }
-        }else if(argc <= 3 && res == e_decode){
-        printf("Decoding is selected \n");
+        }else if(res == e_decode && argc <= 4 ){
+            // DEcoding Selected ;
+        printf("Info :Decoding is selected \n");
+        DecodeInfo d1;
+        if(read_and_validate_decode_args(argv,&d1)== e_success){
+            printf("INFO : Read and Validate Decode Args is Success\n");
+            if(open_decode_files(&d1) == e_success){
+                printf("INFO : files open Success\n");
+
+               if(do_decoding(&d1) == e_success){
+                    printf("INFO : decoding done\n ");
+                }else{
+                    printf("Error : decoding failed\n");
+                }
+
+            }else{
+                printf("Error : failed to open files\n");
+            }
+        }else{
+            printf("INFO : Read and validate encode args is failure\n");
+        }
+
     }else {
         printf("Invalid option\n");
         printf("For Encoding : ./a.out -e beautiful.bmp secret.txt [stegno.bmp]\n");
