@@ -1,133 +1,73 @@
-BMP Steganography in C
+# BMP Steganography in C
 
-A C-based BMP image steganography project that hides secret file data inside a BMP image using Least Significant Bit (LSB) manipulation.
+A C programming project implementing image steganography using the **Least Significant Bit (LSB)** technique to hide and extract secret data inside a BMP image.
 
-The project implements both encoding and decoding of secret data.
+## 📌 Project Overview
 
-📌 Project Overview
+Steganography is the technique of hiding information inside another medium so that the existence of the information is not obvious.
 
-Steganography is the technique of hiding information inside another medium so that the existence of the hidden information is not obvious.
+This project:
+- Hides a secret text file inside a BMP image.
+- Stores secret data in the LSBs of image bytes.
+- Extracts the hidden data from the stego image.
+- Encodes and decodes a magic string.
+- Encodes and decodes the secret file extension and size.
+- Preserves the BMP header.
 
-In this project, secret data is hidden inside a BMP image by modifying the Least Significant Bits of the image data.
+## 🧠 LSB Steganography
 
-The BMP image is used as the carrier, while the secret file is embedded into the image.
-
-Basic Concept
-Secret File
-     ↓
-Convert data into bits
-     ↓
-Store bits in image LSBs
-     ↓
-Stego BMP Image
-
-During decoding:
-
-Stego BMP Image
-     ↓
-Extract LSBs
-     ↓
-Reconstruct secret bytes
-     ↓
-Original Secret File
-🚀 Features
-Encoding
-Validate command-line arguments
-Open source BMP image
-Open secret file
-Check image capacity
-Copy BMP header
-Encode magic string
-Encode secret file extension size
-Encode secret file extension
-Encode secret file size
-Encode secret file data
-Copy remaining image data
-Generate stego BMP image
-Decoding
-Validate command-line arguments
-Open stego BMP image
-Open output file
-Skip BMP header
-Decode and validate magic string
-Decode secret file extension size
-Decode secret file extension
-Decode secret file size
-Decode secret file data
-Write decoded data to output file
-🧠 LSB Steganography
-
-The project uses the Least Significant Bit (LSB) of image bytes to store secret information.
+LSB stands for **Least Significant Bit**.
 
 For example:
 
-Original Image Byte
+```text
+Original image byte : 10110100
+Secret bit          :        1
+Modified byte       : 10110101
+```
 
-10110110
-       ↑
-      LSB
+Only the least significant bit is changed.
 
-If the secret bit is 1, the image byte can become:
+One secret byte contains 8 bits, so **8 image bytes are used to store one secret byte**.
 
-10110111
+```text
+Image Byte 1 → Secret Bit 0
+Image Byte 2 → Secret Bit 1
+Image Byte 3 → Secret Bit 2
+Image Byte 4 → Secret Bit 3
+Image Byte 5 → Secret Bit 4
+Image Byte 6 → Secret Bit 5
+Image Byte 7 → Secret Bit 6
+Image Byte 8 → Secret Bit 7
+```
 
-Only the least significant bit changes.
+## 📦 Data Layout
 
-🔐 Encoding One Byte
+```text
++---------------------------+
+| BMP Header                |
+| 54 bytes                  |
++---------------------------+
+| Magic String              |
++---------------------------+
+| Secret Extension Size     |
+| 32 bits                   |
++---------------------------+
+| Secret File Extension     |
++---------------------------+
+| Secret File Size          |
+| 32 bits                   |
++---------------------------+
+| Secret File Data          |
++---------------------------+
+| Remaining Image Data      |
++---------------------------+
+```
 
-One secret byte contains 8 bits.
+## 🔐 Encoding Flow
 
-For example:
-
-Secret Byte
-
-01000001
-
-The 8 bits are stored in the LSBs of 8 image bytes.
-
-Secret Bit       Image Byte LSB
-
-    0        →       LSB of byte 1
-    1        →       LSB of byte 2
-    0        →       LSB of byte 3
-    0        →       LSB of byte 4
-    0        →       LSB of byte 5
-    0        →       LSB of byte 6
-    1        →       LSB of byte 7
-    0        →       LSB of byte 8
-🔓 Decoding One Byte
-
-The decoding process reverses the encoding process.
-
-8 Image Bytes
-      ↓
-Extract LSB from each byte
-      ↓
-Reconstruct 8 bits
-      ↓
-Original Secret Byte
-📦 Data Stored Inside the BMP
-
-The project stores hidden information in the following order:
-
-BMP Header
-     ↓
-Magic String
-     ↓
-Secret File Extension Size
-     ↓
-Secret File Extension
-     ↓
-Secret File Size
-     ↓
-Secret File Data
-     ↓
-Remaining Image Data
-
-The decoder follows the same sequence to recover the hidden data.
-
-🔄 Encoding Flow
-Source BMP
+```text
+Input BMP
     ↓
 Validate Arguments
     ↓
@@ -150,14 +90,16 @@ Encode Secret File Data
 Copy Remaining Image Data
     ↓
 Stego BMP
-🔓 Decoding Flow
+```
+
+## 🔓 Decoding Flow
+
+```text
 Stego BMP
     ↓
 Validate Arguments
     ↓
 Open Files
-    ↓
-Skip BMP Header
     ↓
 Decode Magic String
     ↓
@@ -169,286 +111,215 @@ Decode Secret File Size
     ↓
 Decode Secret File Data
     ↓
-Write Output File
-🧩 Important Functions
-Encoding Functions
-read_and_validate_encode_args()
+Output Secret File
+```
 
-Validates the command-line arguments used for encoding.
+## 🛠️ Important Functions
 
-open_files()
+### Encoding
 
-Opens:
+| Function | Purpose |
+|---|---|
+| `read_and_validate_encode_args()` | Validates command-line arguments |
+| `open_files()` | Opens source, secret and output files |
+| `get_image_size_for_bmp()` | Gets BMP image dimensions |
+| `check_capacity()` | Checks image capacity |
+| `copy_bmp_header()` | Copies the BMP header |
+| `encode_magic_string()` | Encodes the magic string |
+| `encode_secret_file_extn_size()` | Encodes extension size |
+| `encode_secret_file_extn()` | Encodes secret file extension |
+| `encode_secret_file_size()` | Encodes secret file size |
+| `encode_secret_file_data()` | Encodes secret data |
+| `encode_byte_to_lsb()` | Encodes one byte using LSBs |
+| `encode_size_to_lsb()` | Encodes a size using LSBs |
+| `copy_remaining_img_data()` | Copies remaining image data |
 
-Source BMP
-Secret file
-Stego BMP
-check_capacity()
+### Decoding
 
-Checks whether the BMP image has enough capacity to store the secret data.
+| Function | Purpose |
+|---|---|
+| `read_and_validate_decode_args()` | Validates decoding arguments |
+| `open_decode_files()` | Opens stego and output files |
+| `decode_magic_string()` | Extracts and verifies the magic string |
+| `decode_data_to_int()` | Decodes 32 bits into an integer |
+| `decode_Secret_file_extn_size()` | Decodes extension size |
+| `decode_Secret_file_extn()` | Decodes secret file extension |
+| `decode_secret_file_size()` | Decodes secret file size |
+| `decode_secret_data()` | Extracts secret file data |
+| `decode_lsb_to_byte()` | Reconstructs one byte from 8 image bytes |
+| `decode_image_to_data()` | Converts image LSBs into data |
 
-copy_bmp_header()
+## 📁 Project Structure
 
-Copies the BMP header from the source image to the stego image.
-
-encode_magic_string()
-
-Stores the predefined magic string inside the image.
-
-The magic string is later used during decoding to verify that the BMP contains encoded data.
-
-encode_byte_to_lsb()
-
-Stores one byte of secret data into the LSBs of 8 image bytes.
-
-encode_size_to_lsb()
-
-Stores a size value using the LSBs of 32 image bytes.
-
-encode_secret_data()
-
-Reads secret file data and embeds it into the image.
-
-copy_remaining_img_data()
-
-Copies the remaining image data after the secret information has been encoded.
-
-🔍 Decoding Functions
-decode_magic_string()
-
-Starts decoding after the BMP header and extracts the magic string.
-
-The decoded magic string is compared with the expected magic string.
-
-Decoded Magic String
-        ↓
-Compare
-        ↓
-MATCH → Continue decoding
-NO MATCH → Decoding fails
-decode_lsb_to_byte()
-
-Extracts 8 LSBs from 8 image bytes and reconstructs one byte.
-
-Image Byte 0 LSB → Bit 0
-Image Byte 1 LSB → Bit 1
-Image Byte 2 LSB → Bit 2
-...
-Image Byte 7 LSB → Bit 7
-decode_image_to_data()
-
-Repeatedly reads 8 image bytes and reconstructs secret data one byte at a time.
-
-8 image bytes → 1 decoded byte
-8 image bytes → 1 decoded byte
-8 image bytes → 1 decoded byte
-...
-decode_data_to_int()
-
-Extracts 32 LSBs from 32 image bytes and reconstructs an integer.
-
-This is used for:
-
-Secret file extension size
-Secret file size
-decode_Secret_file_extn_size()
-
-Decodes the size of the secret file extension.
-
-decode_Secret_file_extn()
-
-Decodes the secret file extension using the previously decoded extension size.
-
-Example:
-
-4
-↓
-.txt
-decode_secret_file_size()
-
-Decodes the size of the secret file.
-
-decode_secret_data()
-
-Decodes the exact number of bytes specified by the secret file size and writes them to the output file.
-
-📁 Project Structure
+```text
 Stegnography/
-│
+├── README.md
 ├── encode.c
 ├── encode.h
-│
 ├── decode.c
 ├── decode.h
-│
 ├── common.h
 ├── types.h
-│
-├── test_encode.c
-│
-└── README.md
-🛠️ Technologies Used
-C Programming
-GCC
-Linux
-File Handling
-Binary File Processing
-Bitwise Operators
-Structures
-Pointers
-Command-Line Arguments
-BMP File Format
-LSB Steganography
-💻 Compilation
+└── test_encode.c
+```
 
-Compile all C files:
+## 💻 Technologies Used
 
+- C Programming
+- GCC
+- Linux / WSL
+- File Handling
+- Pointers
+- Structures
+- Bit Manipulation
+- Command-Line Arguments
+- BMP File Format
+- LSB Steganography
+
+## ⚙️ Compilation
+
+```bash
 gcc *.c
+```
 
-Compile with compiler warnings:
+With compiler warnings:
 
+```bash
 gcc *.c -Wall -Wextra
-🔐 Encoding
+```
 
-Basic command:
+## ▶️ Usage
 
+### Encode
+
+```bash
 ./a.out -e source.bmp secret.txt
+```
 
-This creates:
+Or specify the output BMP:
 
-default.bmp
-
-You can also specify the output BMP:
-
+```bash
 ./a.out -e source.bmp secret.txt stego.bmp
-🔓 Decoding
+```
 
-Decode the hidden file:
+### Decode
 
+```bash
 ./a.out -d stego.bmp output.txt
+```
 
-The recovered secret data is written to:
+## 🧪 Testing
 
-output.txt
-🧪 Testing
+Compare the original and decoded files:
 
-After encoding and decoding, compare the original secret file with the decoded file.
-
+```bash
 diff secret.txt output.txt
+```
 
-If there is no output from diff, the files contain identical data.
+Or:
 
-You can also use:
-
+```bash
 cmp secret.txt output.txt
-📊 Complete Example
-Step 1 — Encode
-./a.out -e beautiful.bmp secret.txt stego.bmp
-beautiful.bmp
-      +
-secret.txt
-      ↓
-   Encoder
-      ↓
-stego.bmp
-Step 2 — Decode
-./a.out -d stego.bmp output.txt
-stego.bmp
+```
+
+If there is no output, the files are identical.
+
+## 📚 Concepts Learned
+
+- Command-line arguments
+- File pointers
+- `fopen()`
+- `fread()`
+- `fwrite()`
+- `fseek()`
+- `ftell()`
+- Binary file handling
+- Pointers
+- Structures
+- Arrays
+- Strings
+- Bitwise operators
+- LSB manipulation
+- Modular programming
+- Header files
+- Function prototypes
+- Data validation
+- File size handling
+- BMP file structure
+- Encoding and decoding algorithms
+
+## 🔁 Encoding and Decoding Relationship
+
+Encoding and decoding are inverse operations.
+
+### Encoding
+
+```text
+Secret Data
     ↓
- Decoder
+Convert data into bits
     ↓
-output.txt
-Step 3 — Verify
-diff secret.txt output.txt
-
-No output means the decoded file matches the original file.
-
-🧠 Concepts Learned
-
-This project helped practice several important C programming concepts:
-
-Structures
-Pointers
-Pointer-to-structure
-Character arrays
-Strings
-Command-line arguments
-File pointers
-fopen()
-fread()
-fwrite()
-fseek()
-ftell()
-File modes
-Bitwise AND
-Bitwise OR
-Bit shifting
-LSB manipulation
-Binary file handling
-Modular programming
-Function prototypes
-Header files
-Error handling
-Encoding and decoding algorithms
-📌 Key Learning
-
-The most important concept learned from this project is that encoding and decoding are inverse operations.
-
-Encoding
-Secret Bit
+Store bits in image LSBs
     ↓
-Image LSB
-Decoding
-Image LSB
+Stego Image
+```
+
+### Decoding
+
+```text
+Stego Image
     ↓
-Secret Bit
+Read image LSBs
+    ↓
+Reconstruct bits
+    ↓
+Secret Data
+```
 
-Similarly:
+The decoder must follow the same data layout used by the encoder.
 
-8 secret bits
-     ↓
-8 image bytes
+## 🚀 Future Improvements
 
-During decoding:
+- Support additional secret file extensions.
+- Improve argument validation.
+- Improve error handling.
+- Support larger secret files.
+- Avoid large VLAs for large files.
+- Add more robust BMP validation.
+- Add automated test cases.
+- Improve portability using binary file modes.
 
-8 image bytes
-     ↓
-8 secret bits
-     ↓
-1 secret byte
+## ✅ Project Status
 
-Understanding this relationship makes it possible to design the decoder directly from the encoder's data layout.
+| Component | Status |
+|---|---|
+| BMP Header Handling | ✅ Completed |
+| Image Capacity Check | ✅ Completed |
+| Magic String Encoding | ✅ Completed |
+| Magic String Decoding | ✅ Completed |
+| File Extension Encoding | ✅ Completed |
+| File Extension Decoding | ✅ Completed |
+| File Size Encoding | ✅ Completed |
+| File Size Decoding | ✅ Completed |
+| Secret Data Encoding | ✅ Completed |
+| Secret Data Decoding | ✅ Completed |
+| BMP LSB Steganography | ✅ Completed |
 
-🚧 Future Improvements
+## 👨‍💻 Author
 
-Possible improvements for the project:
+**Omkar More**
 
-Support more secret file types
-Improve BMP validation
-Support larger secret files
-Use dynamic memory allocation for large files
-Decode data in chunks instead of storing the complete secret file on the stack
-Improve error handling
-Validate fread() and fwrite() return values
-Use binary file modes (rb / wb)
-Improve command-line argument validation
-Add more test cases
-Add support for different BMP formats
-👨‍💻 Author
+B.Tech Electrical Engineering
 
-Omkar More
+Interests:
+- Embedded Systems
+- Embedded C
+- Automotive Systems
+- EV Systems
+- Firmware Development
 
-C Programming | Embedded Systems | Automotive & EV Enthusiast
+## 📌 Project Purpose
 
-⭐ Project Status
-Component	Status
-Encoding	✅ Completed
-Decoding	✅ Completed
-Magic String	✅ Implemented
-Extension Encoding	✅ Implemented
-Extension Decoding	✅ Implemented
-File Size Encoding	✅ Implemented
-File Size Decoding	✅ Implemented
-Secret Data Encoding	✅ Implemented
-Secret Data Decoding	✅ Implemented
-BMP LSB Steganography	✅ Implemented
+This project was developed to strengthen **Advanced C programming and embedded-systems fundamentals** through hands-on implementation.
+
+It focuses on understanding how data is represented at the **byte and bit level** and how C can be used to manipulate binary files directly.
