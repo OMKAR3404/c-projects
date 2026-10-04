@@ -40,7 +40,7 @@ The project represents each digit as a node in a linked list and implements arit
 
 **Topics Covered:**
 
-* Singly Linked Lists
+* Doubly Linked Lists
 * Dynamic Memory Allocation
 * Pointers and Double Pointers
 * Linked List Traversal
